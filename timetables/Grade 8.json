@@ -1,0 +1,9 @@
+{
+  "description": "TOYIS grade 8 timetable",
+  "alternation type": "weekly",
+
+  "timetables": {
+    "monday": [[[900, 950], "Physics"], [[950, 1040], "English"]]
+  }
+
+}

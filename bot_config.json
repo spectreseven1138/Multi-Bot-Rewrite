@@ -1,0 +1,24 @@
+{
+  "bot_prefix": ">",
+  "bot_name": "Multi Bot",
+  "bot_colour": "0x59f2c6",
+  "bot_id": 714297616028008518,
+  "default_timezone": "Japan",
+
+  "music_channels": {
+    "764050676211908618": "769474242894233601",
+    "592625382205947904": "592631252155367444"
+  },
+
+  "owner_ids": [402344993391640578],
+  "youtube_api_key": "AIzaSyBCHf9vhjwCrUoj4JGB44Ul_CzuN1MbIlQ",
+  "openweather_api_key": "5b0b0beb8691011a2a9368d861dd09ea",
+  "client_id": "NzE0Mjk3NjE2MDI4MDA4NTE4.Xs4K1g.8-CzXhJ9dHzlb9Y7ho2asbhHKwg",
+  "bot_activity": ["playing", "Shrek Super Slam"], // First value can be "playing" "watching" "streaming" or "listening"
+                                                  // Second value is the title of the activity
+                                                  // Optional third value is the Twitch stream URL (only for streaming mode)
+
+
+  "idle_music_connection_timeout": 30
+
+}

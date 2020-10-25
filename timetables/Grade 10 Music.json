@@ -1,0 +1,117 @@
+{
+  "description": "TOYIS Grade 10 timetable (Music)",
+  "alternation type": "weekly",  // Valid values are "weekly" "monthly" "yearly" and null
+  "alternation start": [2020, 10, 19],
+
+  "timetables": [
+    {
+      "name": "Week A",
+      "monday": [
+        [[900, 950], "English"],
+        [[955, 1045], "Physics"],
+        [[1045, 1100], "Morning Recess"],
+        [[1100, 1150], "Design"],
+        [[1150, 1250], "Lunch"],
+        [[1250, 1340], "Library"],
+        [[1345, 1435], "Math"],
+        [[1440, 1530], "Japanese"],
+        [[1530, 1600], "Homeroom"]
+      ],
+      "tuesday": [
+        [[900, 950], "English"],
+        [[955, 1045], "Physics"],
+        [[1045, 1100], "Morning Recess"],
+        [[1100, 1150], "Individuals & Societies"],
+        [[1150, 1250], "Lunch"],
+        [[1250, 1320], "Transition to Nakatsu"],
+        [[1320, 1500], "Music"],
+        [[1510, 1600], "Physical Education"]
+      ],
+      "wednesday": [
+        [[900, 950], "Japanese"],
+        [[955, 1045], "Math"],
+        [[1045, 1100], "Morning Recess"],
+        [[1100, 1150], "Individuals & Societies"],
+        [[1150, 1250], "Lunch"],
+        [[1250, 1435], "Design"]
+      ],
+      "thursday": [
+        [[900, 950], "Individuals & Societies"],
+        [[955, 1045], "Math"],
+        [[1045, 1100], "Morning Recess"],
+        [[1100, 1150], "Japanese"],
+        [[1150, 1250], "Lunch"],
+        [[1250, 1340], "English"],
+        [[1345, 1415], "Transition to Nakatsu"],
+        [[1415, 1505], "Music"],
+        [[1510, 1600], "Physical Education"]
+      ],
+      "friday": [
+        [[900, 950], "Math"],
+        [[955, 1045], "Design"],
+        [[1045, 1100], "Morning Recess"],
+        [[1100, 1150], "Japanese"],
+        [[1150, 1250], "Lunch"],
+        [[1250, 1340], "English"],
+        [[1345, 1530], "Physics"],
+        [[1530, 1600], "Homeroom"]
+      ]
+    },
+    {
+      "name": "Week B",
+      "monday": [
+        [[900, 950], "Japanese"],
+        [[955, 1045], "Math"],
+        [[1045, 1100], "Morning Recess"],
+        [[1100, 1150], "Physics"],
+        [[1150, 1250], "Lunch"],
+        [[1250, 1340], "English"],
+        [[1345, 1435], "Individuals & Societies"],
+        [[1440, 1530], "Physics"],
+        [[1530, 1600], "Homeroom"]
+      ],
+      "tuesday": [
+        [[900, 950], "English"],
+        [[955, 1045], "Individuals & Societies"],
+        [[1045, 1100], "Morning Recess"],
+        [[1100, 1150], "Library"],
+        [[1150, 1250], "Lunch"],
+        [[1250, 1320], "Transition to Nakatsu"],
+        [[1320, 1500], "Music"],
+        [[1510, 1600], "Physical Education"]
+      ],
+      "wednesday": [
+        [[900, 950], "Japanese"],
+        [[955, 1045], "Math"],
+        [[1045, 1100], "Morning Recess"],
+        [[1100, 1150], "Design"],
+        [[1150, 1250], "Lunch"],
+        [[1250, 1340], "Physics"],
+        [[1345, 1425], "Individuals & Societies"]
+      ],
+      "thursday": [
+        [[900, 950], "Math"],
+        [[955, 1045], "Design"],
+        [[1045, 1100], "Morning Recess"],
+        [[1100, 1150], "Japanese"],
+        [[1150, 1250], "Lunch"],
+        [[1250, 1340], "English"],
+        [[1345, 1415], "Transition to Nakatsu"],
+        [[1415, 1505], "Health"],
+        [[1510, 1600], "Physical Education"]
+      ],
+      "friday": [
+        [[900, 1045], "Physics"],
+        [[1045, 1100], "Morning Recess"],
+        [[1100, 1150], "Japanese"],
+        [[1150, 1250], "Lunch"],
+        [[1250, 1340], "English"],
+        [[1345, 1435], "Math"],
+        [[1440, 1530], "Individuals & Societies"],
+        [[1530, 1600], "Homeroom"]
+      ]
+    }
+
+  ]
+
+}
