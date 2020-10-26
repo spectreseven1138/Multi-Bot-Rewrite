@@ -1,5 +1,6 @@
 import asyncio
 import inspect
+import os
 from http.client import InvalidURL
 
 import urllib.request
@@ -18,9 +19,9 @@ import utils
 
 youtubedl_opts = {
     "quiet": False,
-    # "continue": True,
-    # 'format': 'worstaudio/worst',
-    # "outtmpl": 'music_download/%(title)s.%(ext)s',
+    "continue": True,
+    'format': 'worstaudio/worst',
+    "outtmpl": 'music_download/%(title)s.%(ext)s',
     # 'postprocessors': [{
     #     'key': 'FFmpegExtractAudio',
     #     'preferredcodec': 'mp3',
@@ -131,11 +132,21 @@ class MusicCog(commands.Cog):
         parsed = urlparse.parse_qs(urlparse.urlparse(download).query)
         video = self.YtApi.get_video_by_id(video_id=parsed["v"][0]).items[0]
 
-        # Get download URL, retry on DownloadError up to 5 times
+        # Notify that audio is downloading
+        await ctx.send(utils.format_message(ctx, "Loading  '" + video.snippet.title + "'  (" + str(
+            isodate.parse_duration(video.contentDetails.duration)) + ")"))
+
+        # Return function if video duration is greater than 1 hour
+        if isodate.parse_duration(video.contentDetails.duration).seconds > 3600:
+            await ctx.send(utils.format_message(ctx,
+                                               "This video is more than 30 minutes long, so it might take a few seconds to load\nIf this is an extended video, 1 hour version, etc, please use `" +
+                                               self.Config[
+                                                   "bot_prefix"] + "loop` to loop the standard version instead"))
+
+        # Download the audio, retry on DownloadError up to 5 times
         for i in range(0, 5):
             try:
-                download_info = YoutubeDL().extract_info(url=download, download=False)
-                download_url = download_info["formats"][0]["url"]
+                download_info = YoutubeDL(youtubedl_opts).extract_info(url=download)
                 break
             except DownloadError:
                 continue
@@ -157,6 +168,11 @@ class MusicCog(commands.Cog):
                         isodate.parse_duration(video.contentDetails.duration)) + ")\nGuild: " + guild.name)
             return
 
+        # Rename the file to its VideoID
+        for file in os.listdir("music_download"):
+            if file.endswith(".webm") or file.endswith(".m4a") or file.endswith(".mkv") or file.endswith(".mp3"):
+                os.rename("music_download/" + file, "music_download/" + id)
+
         # Create a music queue for the current guild if it does not exist
         if str(guild.id) not in self.music_queue.keys():
             self.music_queue[str(guild.id)] = []
@@ -164,11 +180,11 @@ class MusicCog(commands.Cog):
         # Append video info to the current guild's music queue
         try:
             self.music_queue[str(guild.id)].append(
-                [download_url, download_info["title"], download_info["thumbnail"], download_info["uploader"]])
+                [download_info["id"], download_info["title"], download_info["thumbnail"], download_info["uploader"]])
         except KeyError:
             entries = download_info["entries"][0]
             self.music_queue[str(guild.id)].append(
-                [download_url, entries["title"], entries["thumbnail"], entries["uploader"]])
+                [entries["id"], entries["title"], entries["thumbnail"], entries["uploader"]])
 
         # if guild.voice_client is None:
         #     try:
@@ -235,6 +251,16 @@ class MusicCog(commands.Cog):
 
     async def process_queue(self, ctx, done):
 
+        # Reconnect to the voice channel (because connection may time out automatically if download is slow)
+        for voice_client in self.client.voice_clients:
+            if voice_client.guild == ctx.message.guild:
+                await voice_client.disconnect()
+                break
+
+        await self.client.get_channel(self.voice_channels[str(ctx.message.guild.id)].id).connect(timeout=1)
+
+        # await self.voice_channels[str(ctx.message.guild.id)].connect(timeout=1)
+
         guild = ctx.message.guild
         voice = get(self.client.voice_clients, guild=guild)
 
@@ -268,7 +294,7 @@ class MusicCog(commands.Cog):
         looping = False
         if ((done and not self.loop[guild.id]) or (done and self.skipped[guild.id])) and not self.restarted[guild.id]:
             self.skipped[guild.id] = False
-            self.music_queue[str(guild.id)].pop(0)
+            os.remove("music_download/" + self.music_queue[str(guild.id)].pop(0)[0])
         elif done:
             if self.restarted[guild.id]:
                 self.restarted[guild.id] = False
@@ -283,8 +309,7 @@ class MusicCog(commands.Cog):
 
         id = self.music_queue[str(guild.id)][0][0]
 
-        ffmpeg_options = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
-        voice.play(discord.FFmpegPCMAudio(self.music_queue[str(guild.id)][0][0], **ffmpeg_options))
+        voice.play(discord.FFmpegPCMAudio("music_download/" + id))
 
         embed = discord.Embed(
             title=self.music_queue[str(guild.id)][0][1],

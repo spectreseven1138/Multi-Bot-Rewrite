@@ -104,7 +104,7 @@ class TimeTableCog(commands.Cog):
 
             # Get the current day's timetable
             try:
-                current_day = current_timetable[days[current_alternation]]
+                current_day = current_timetable[days[current_time.weekday()>tt]]
             except KeyError:
                 out = "You don't have any events scheduled for today"
             else:
@@ -145,7 +145,7 @@ class TimeTableCog(commands.Cog):
                 else:
                     ia = current_alternation
 
-                for x in range(0, len(timetable_cache[user.timetable]["timetables"]) + 1):
+                for x in range(0, len(timetable_cache[user.timetable]["timetables"])):
 
                     current_timetable = timetable_cache[user.timetable]["timetables"][ia]
 

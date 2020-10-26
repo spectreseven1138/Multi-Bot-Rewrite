@@ -86,9 +86,9 @@ if __name__ == '__main__':
         if not os.path.exists(folder):
             os.mkdir(folder)
 
-    # Delete leftover music files
-    for file in os.listdir("music_download"):
-        os.remove("music_download/" + file)
+    # Delete leftover music files (LEGACY)
+    # for file in os.listdir("music_download"):
+    #     os.remove("music_download/" + file)
 
     # Start cogs
     client.add_cog(users.UserCog(client, Config))
