@@ -22,7 +22,6 @@ youtubedl_opts = {
     "continue": True,
     'format': 'worstaudio/worst',
     "outtmpl": 'music_download/%(title)s.%(ext)s',
-    "no playlist": "True",
     # 'postprocessors': [{
     #     'key': 'FFmpegExtractAudio',
     #     'preferredcodec': 'mp3',

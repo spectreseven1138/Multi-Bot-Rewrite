@@ -73,7 +73,12 @@ class WeatherCog(commands.Cog):
         self.string_corona_countries_2 = "Mali, Malta, Mauritania, Mauritius, Mexico, Moldova, Monaco, Mongolia, Montenegro, Morocco, Mozambique, Myanmar, Namibia, Nepal, Netherlands, New Zealand, Nicaragua, Niger, Nigeria, Norway, Oman, Pakistan, Palestinian Territory, Panama, Papua New Guinea, Paraguay, Peru, Philippines, Poland, Portugal, Qatar, Republic of Kosovo, Romania, Russian Federation, Rwanda, Saint Kitts and Nevis, Saint Lucia, Saint Vincent and Grenadines, San Marino, Sao Tome and Principe, Saudi Arabia, Senegal, Serbia, Seychelles, Sierra Leone, Singapore, Slovakia, Slovenia, Somalia, South Africa, South Sudan, Spain, Sri Lanka, Sudan, Suriname, Swaziland, Sweden, Switzerland, Syrian Arab Republic (Syria), Taiwan, Republic of China, Tajikistan, Tanzania, United Republic of, Thailand, Timor-Leste, Togo, Trinidad and Tobago, Tunisia, Turkey, Uganda, Ukraine, United Arab Emirates, United Kingdom, United States of America, Uruguay, Uzbekistan, Venezuela (Bolivarian Republic), Viet Nam, Western Sahara, Yemen, Zambia, Zimbabwe"
 
     @commands.command(pass_context=True)
-    async def weather(self, ctx, *, city):
+    async def weather(self, ctx, *, city=None):
+
+        if city is None:
+            await ctx.send(utils.format_message(ctx, "Specify a city to lookup the weather of like this: `" + self.Config["bot_prefix"] + inspect.getframeinfo(
+                                                    inspect.currentframe()).function + " <city>`"))
+            return
 
         # Get search results for the inputted city
         search_result = requests.get("http://dataservice.accuweather.com/locations/v1/cities/search?apikey=" + self.Config["accuweather_api_key"] + "&q=" + quote(city))

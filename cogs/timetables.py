@@ -19,7 +19,7 @@ class TimeTableCog(commands.Cog):
         self.Config = config
 
     @commands.command(pass_context=True)
-    async def tt(self, ctx, mode: str = None, *, data):
+    async def tt(self, ctx, mode: str = None, *, data: str = None):
 
         # Get user from file
         user = users.get_user(ctx.message.author.id)
