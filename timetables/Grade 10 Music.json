@@ -1,7 +1,7 @@
 {
   "description": "TOYIS Grade 10 timetable (Music)",
   "alternation type": "weekly",  // Valid values are "weekly" "monthly" "yearly" and null
-  "alternation start": [2020, 10, 19],
+  "alternation start": [2020, 11, 23],
 
   "timetables": [
     {

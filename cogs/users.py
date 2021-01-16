@@ -6,13 +6,15 @@ import commentjson as json
 import utils
 
 
-class UserCog(commands.Cog):
+class Users(commands.Cog):
 
     def __init__(self, client, config):
+        global cli
+
         self.client = client
         self.Config = config
 
-    @commands.command(pass_context=True)
+    @commands.command(help="Sets the user's timezone to be used with timetable commands", brief='{"admin": False}')
     async def tz(self, ctx, mode: str, data: str):
 
         mode = mode.lower()
@@ -42,14 +44,16 @@ class UserCog(commands.Cog):
                     out = out + tz + "\n"
             await ctx.send(utils.format_message(ctx, utils.format_message(ctx, "Timezones containing '" + data + "':\n\n" + out)))
 
-
 # Bot user object
 class User:
 
-    def __init__(self, id: int, timetable: str, timezone: str):
+    def __init__(self, id: int, config: dict, timetable: str = None, timezone: str = None, crypt_key_location: dict = None):
+        if timezone is None:
+            timezone = config["default_timezone"]
         self.id = id
         self.timetable = timetable
         self.timezone = timezone
+        self.crypt_key_location = crypt_key_location
 
     # Save the user's data to its file
     def save(self):
@@ -61,23 +65,25 @@ class User:
             file = open("users/" + str(self.id) + ".json", "x")
 
         # Format user data as JSON and write it to the file
-        data = json.dumps({"id": self.id, "timetable": self.timetable, "timezone": self.timezone}, indent=4)
+        data = json.dumps({"id": self.id, "timetable": self.timetable, "timezone": self.timezone, "crypt_key_location": self.crypt_key_location}, indent=4)
         file.write(data)
         file.close()
 
 
 # Returns user object tied to the supplied ID
-def get_user(id: int):
+def get_user(id: int, config: dict):
 
     # Return error if user file does not exist
     if not is_user_saved(id):
-        return -1
+        user = User(id, config)
+        user.save()
+        return user
 
     # Load JSON data from user file and return it as a User object
     file = open("users/" + str(id) + ".json", "r")
     data = json.loads(file.read())
     file.close()
-    return User(data["id"], data["timetable"], data["timezone"])
+    return User(data["id"], config, data["timetable"], data["timezone"], data["crypt_key_location"])
 
 
 # Returns True if user with supplied ID has been created

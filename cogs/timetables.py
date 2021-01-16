@@ -12,7 +12,7 @@ import warnings
 timetable_cache = {}
 
 
-class TimeTableCog(commands.Cog):
+class Timetables(commands.Cog):
 
     def __init__(self, client, config):
         self.client = client
@@ -22,7 +22,7 @@ class TimeTableCog(commands.Cog):
     async def tt(self, ctx, mode: str = None, *, data: str = None):
 
         # Get user from file
-        user = users.get_user(ctx.message.author.id)
+        user = users.get_user(ctx.message.author.id, self.Config)
 
         # Parse data to list
         parsed = utils.parse(data)
@@ -104,7 +104,7 @@ class TimeTableCog(commands.Cog):
 
             # Get the current day's timetable
             try:
-                current_day = current_timetable[days[current_time.weekday()>tt]]
+                current_day = current_timetable[days[current_time.weekday()]]
             except KeyError:
                 out = "You don't have any events scheduled for today"
             else:

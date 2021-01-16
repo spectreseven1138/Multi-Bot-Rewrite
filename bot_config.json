@@ -1,23 +1,24 @@
 {
-  "bot_prefix": ">",
-  "bot_name": "Multi Bot",
+  "bot_prefix": "!",
   "bot_colour": "0x59f2c6",
-  "bot_id": 714297616028008518,
   "default_timezone": "Japan",
 
-  "music_channels": {
-    "764050676211908618": "769474242894233601",
-    "592625382205947904": "592631252155367444"
+  "music_text_channels": {
+    "764050676211908618": [769474242894233601],
+    "592625382205947904": [592631252155367444],
+  },
+
+  "music_voice_channels": {
+    "764050676211908618": 769474242894233601,
+    "592625382205947904": 592631252155367444,
   },
 
   "owner_ids": [402344993391640578],
   "youtube_api_key": "AIzaSyBCHf9vhjwCrUoj4JGB44Ul_CzuN1MbIlQ",
   "accuweather_api_key": "GRnHdjLyDnSxPpg0b6tazlelR1GiUb8p",
   "client_id": "NzE0Mjk3NjE2MDI4MDA4NTE4.Xs4K1g.8-CzXhJ9dHzlb9Y7ho2asbhHKwg",
-  "bot_activity": ["playing", "Shrek Super Slam"], // First value can be "playing" "watching" "streaming" or "listening"
-                                                  // Second value is the title of the activity
-                                                  // Optional third value is the Twitch stream URL (only for streaming mode)
 
+  "genius_access_token": "X4UK4ESbWR5aeES_s5EtBH1hpaUfook6Buc9ERqJZPlmy2FeNtIxWePWDCI10WbD",
 
   "idle_music_connection_timeout": 30
 

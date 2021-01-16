@@ -1,5 +1,9 @@
 {
     "id": 402344993391640578,
     "timetable": "Grade 10 Music",
-    "timezone": "Japan"
+    "timezone": "Japan",
+    "crypt_key_location": {
+        "channel": 714299840087064637,
+        "message": 772055027858669569
+    }
 }
