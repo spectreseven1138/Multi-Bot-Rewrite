@@ -3,31 +3,28 @@ import os
 import commentjson as json
 import discord
 from discord.ext import commands
-from discord.ext.commands import bot
 
-from cogs import timetables, users, tasks, data, miscellaneous, music_new
+from cogs.music import main as Music
+from cogs.data import main as Data
+from cogs.miscellaneous import main as Miscellaneous
+from cogs.tasks import main as Tasks
+from cogs.timetables import main as Timetables
+from cogs.users import main as Users
+from cogs.feedback import main as Feedback
 
 file = open("bot_config.json", "r")
 Config = json.loads(file.read())
 file.close()
 client = commands.Bot(command_prefix=commands.when_mentioned_or(Config["bot_prefix"]), intents=discord.Intents.all())
 
-cogs = [
-    [users.Users, "Users"],
-    [timetables.Timetables, "Timetables"],
-    [tasks.Tasks, "Tasks"],
-    [music_new.Music, "Music"],
-    [data.Data, "Data"],
-    [miscellaneous.Miscellaneous, "Miscellaneous"]
-]
 
 @client.event
 async def on_ready():
 
     await set_status("playing", "Use " + Config["bot_prefix"] + "help for info")
 
-    for id in Config["owner_ids"]:
-        await client.get_user(id).send("Ready")
+    for owner_id in Config["owner_ids"]:
+        await client.get_user(owner_id).send("Ready")
 
     # Disconnect from all voice channels
     for voice_client in client.voice_clients:
@@ -81,14 +78,22 @@ if __name__ == '__main__':
             os.mkdir(folder)
 
     # Delete leftover music files
-    for file in os.listdir("music_download"):
-        os.remove("music_download/" + file)
+    for file in os.listdir("cogs/music/downloads"):
+        os.remove("cogs/music/downloads/" + file)
 
+    cogs = [
+        [Users.Users],
+        [Timetables.Timetables],
+        [Tasks.Tasks],
+        [Music.Music],
+        [Data.Data],
+        [Miscellaneous.Miscellaneous],
+        [Feedback.Feedback]
+    ]
 
-    # # Start cogs
+    # Start cogs
     for cog in cogs:
-
-        if cog[0] == miscellaneous.Miscellaneous:
+        if cog[0] == Miscellaneous.Miscellaneous:
             client.add_cog(cog[0](client, Config, cogs))
         else:
             client.add_cog(cog[0](client, Config))
