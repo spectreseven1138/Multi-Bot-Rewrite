@@ -5,7 +5,7 @@ import requests
 from discord.channel import DMChannel
 import commentjson as json
 
-f = open("bot_config.json", "r")
+f = open("./bot_config.json", "r")
 Config = json.loads(f.read())
 f.close()
 

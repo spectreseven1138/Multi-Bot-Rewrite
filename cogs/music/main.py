@@ -654,7 +654,7 @@ class Music(commands.Cog):
             return
 
         embed.set_thumbnail(url=song.song_art_image_url)
-        embed.set_footer(text="Album: " + song.album + "   |   Artist: " + song.artist + "   |   Date: " + song.year)
+        embed.set_footer(text="Album: " + str(song.album) + "   |   Artist: " + str(song.artist) + "   |   Date: " + str(song.year))
         await ctx.send(embed=embed)
 
     @commands.command(
