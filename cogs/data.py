@@ -1,6 +1,7 @@
 import inspect
 import locale
 import re
+import pytz
 from datetime import datetime
 from urllib.parse import quote
 from urllib.request import urlopen
@@ -17,7 +18,7 @@ class Data(commands.Cog):
         self.client = client
         self.Config = config
 
-        self.oyister_cache = None
+        # self.oyister_cache = None
 
         self.weather_types = {
             "1": "clear_day",
@@ -73,6 +74,30 @@ class Data(commands.Cog):
 
         self.string_corona_countries_1 = "Afghanistan, Albania, Algeria, Andorra, Angola, Antigua and Barbuda, Argentina, Armenia, Australia, Austria, Azerbaijan, Bahamas, Bahrain, Bangladesh, Barbados, Belarus, Belgium, Belize, Benin, Bhutan, Bolivia, Bosnia and Herzegovina, Botswana, Brazil, Brunei Darussalam, Bulgaria, Burkina Faso, Burundi, Cambodia, Cameroon, Canada, Cape Verde, Central African Republic, Chad, Chile, China, Colombia, Comoros, Congo (Brazzaville), Congo (Kinshasa), Costa Rica, Croatia, Cuba, Cyprus, Czech Republic, Côte d'Ivoire, Denmark, Djibouti, Dominica, Dominican Republic, Ecuador, Egypt, El Salvador, Equatorial Guinea, Eritrea, Estonia, Ethiopia, Fiji, Finland, France, Gabon, Gambia, Georgia, Germany, Ghana, Greece, Grenada, Guatemala, Guinea, Guinea-Bissau, Guyana, Haiti, Holy See (Vatican City State), Honduras, Hungary, Iceland, India, Indonesia, Iran, Islamic Republic of, Iraq, Ireland, Israel, Italy, Jamaica, Japan, Jordan, Kazakhstan, Kenya, Korea (South), Kuwait, Kyrgyzstan, Lao PDR, Latvia, Lebanon, Lesotho, Liberia, Libya, Liechtenstein, Lithuania, Luxembourg, Macedonia, Republic of, Madagascar, Malawi, Malaysia, Maldives"
         self.string_corona_countries_2 = "Mali, Malta, Mauritania, Mauritius, Mexico, Moldova, Monaco, Mongolia, Montenegro, Morocco, Mozambique, Myanmar, Namibia, Nepal, Netherlands, New Zealand, Nicaragua, Niger, Nigeria, Norway, Oman, Pakistan, Palestinian Territory, Panama, Papua New Guinea, Paraguay, Peru, Philippines, Poland, Portugal, Qatar, Republic of Kosovo, Romania, Russian Federation, Rwanda, Saint Kitts and Nevis, Saint Lucia, Saint Vincent and Grenadines, San Marino, Sao Tome and Principe, Saudi Arabia, Senegal, Serbia, Seychelles, Sierra Leone, Singapore, Slovakia, Slovenia, Somalia, South Africa, South Sudan, Spain, Sri Lanka, Sudan, Suriname, Swaziland, Sweden, Switzerland, Syrian Arab Republic (Syria), Taiwan, Republic of China, Tajikistan, Tanzania, United Republic of, Thailand, Timor-Leste, Togo, Trinidad and Tobago, Tunisia, Turkey, Uganda, Ukraine, United Arab Emirates, United Kingdom, United States of America, Uruguay, Uzbekistan, Venezuela (Bolivarian Republic), Viet Nam, Western Sahara, Yemen, Zambia, Zimbabwe"
+
+    @commands.command(brief=str({"type": None, "syntax": "timein <timezone>", "examples": ["timein london",
+                                                                                           "timein australia"]}),
+                      help="Displays the current time in the specified timezone")
+    async def timein(self, ctx, *, timezone=None):
+
+        if timezone is None:
+            await utils.incorrect_syntax(ctx, "timein")
+            return
+        
+        for valid_timezone in pytz.common_timezones:
+            if timezone.lower() in valid_timezone.lower():
+                timezone = valid_timezone
+
+        try:
+            tz = pytz.timezone(timezone)
+        except pytz.UnknownTimeZoneError:
+            await ctx.send(utils.format_message(ctx, "'" + timezone + "' doesn't match any known timezones"))
+            return
+
+        current_time = datetime.now(tz)
+
+        await ctx.send(utils.format_message(ctx, "The current time in " + timezone + " is " + str(current_time)[:16]))
+
 
     @commands.command(pass_context=True)
     async def weather(self, ctx, *, city=None):
@@ -155,7 +180,7 @@ class Data(commands.Cog):
 
             # If cached data is at least a day old, get new data from the API
             if int(self.covid_data_cache["Date"][5:7]) < datetime.now().month or int(self.covid_data_cache["Date"][8:10]) < datetime.now().day:
-                data = eval(urlopen(url="https://api.covid19api.com/summary").read())
+                data = eval(urlopen(url="https://api.covid19api.com/summary").read()) # wtf
                 self.covid_data_cache = data
                 self.covid_data_cache_time = datetime.now()
 
@@ -209,34 +234,34 @@ class Data(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @commands.command(pass_context=True)
-    async def oyister(self, ctx, *, input=None):
+    # @commands.command(pass_context=True)
+    # async def oyister(self, ctx, *, input=None):
 
-        if input is not None:
-            data = str(input).lower()
+    #     if input is not None:
+    #         data = str(input).lower()
 
-        # Get OYISTER data if it isn't cached or a refresh was requested
-        if input == "reload" or self.oyister_cache is None:
-            NewsFeed = feedparser.parse("https://oyister.oyis.org/feed/")
-            entries = NewsFeed.entries
+    #     # Get OYISTER data if it isn't cached or a refresh was requested
+    #     if input == "reload" or self.oyister_cache is None:
+    #         NewsFeed = feedparser.parse("https://oyister.oyis.org/feed/")
+    #         entries = NewsFeed.entries
 
-            self.oyister_cache = {entry["title"]: entry for entry in entries}
+    #         self.oyister_cache = {entry["title"]: entry for entry in entries}
 
 
-        # Create a Discord embed containing the weather information
-        embed = discord.Embed(
-            title="THE OYISTER",
-            description="The OYIS Digital Newspaper\n\u200b",
-            colour=discord.Colour(value=eval(self.Config["bot_colour"])),
-            url="https://oyister.oyis.org/"
-        )
+    #     # Create a Discord embed containing the weather information
+    #     embed = discord.Embed(
+    #         title="THE OYISTER",
+    #         description="The OYIS Digital Newspaper\n\u200b",
+    #         colour=discord.Colour(value=eval(self.Config["bot_colour"])),
+    #         url="https://oyister.oyis.org/"
+    #     )
 
-        embed.set_thumbnail(url="https://oyister.oyis.org/favicon.ico")
+    #     embed.set_thumbnail(url="https://oyister.oyis.org/favicon.ico")
 
-        for article in self.oyister_cache.values():
-            print(article)
-            embed.add_field(name=article["published"][5:-15] + " (" + article["author"] + ")", value="\u200b          [" + article["title"] + "](" + article["links"][0]["href"] + ")", inline=False)
+    #     for article in self.oyister_cache.values():
+    #         print(article)
+    #         embed.add_field(name=article["published"][5:-15] + " (" + article["author"] + ")", value="\u200b          [" + article["title"] + "](" + article["links"][0]["href"] + ")", inline=False)
 
-        # embed.set_footer(text="\u200b\nSource: AccuWeather")
+    #     # embed.set_footer(text="\u200b\nSource: AccuWeather")
 
-        await ctx.send(embed=embed)
+    #     await ctx.send(embed=embed)

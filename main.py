@@ -13,9 +13,9 @@ file.close()
 client = commands.Bot(command_prefix=commands.when_mentioned_or(Config["bot_prefix"]), intents=discord.Intents.all())
 
 cogs = [
-    [users.Users, "Users"],
-    [timetables.Timetables, "Timetables"],
-    [tasks.Tasks, "Tasks"],
+    # [users.Users, "Users"],
+    # [timetables.Timetables, "Timetables"],
+    # [tasks.Tasks, "Tasks"],
     [music_new.Music, "Music"],
     [data.Data, "Data"],
     [miscellaneous.Miscellaneous, "Miscellaneous"]
@@ -84,10 +84,8 @@ if __name__ == '__main__':
     for file in os.listdir("music_download"):
         os.remove("music_download/" + file)
 
-
-    # # Start cogs
+    # Start cogs
     for cog in cogs:
-
         if cog[0] == miscellaneous.Miscellaneous:
             client.add_cog(cog[0](client, Config, cogs))
         else:

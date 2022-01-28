@@ -481,12 +481,12 @@ class Music(commands.Cog):
         else:
             await utils.incorrect_syntax(ctx, "loop")
 
-    @commands.command(brief=str({"type": None, "syntax": "download <search/URL>",
-                                 "examples": ["download stickerbrush symphony",
-                                              "download https://www.youtube.com/watch?v=dQw4w9WgXcQ"]}),
-                      help="Same as the `play` command, but preloads the audio for smoother playback")
-    async def download(self, ctx, *, search_or_url=None):
-        await self.play(ctx=ctx, search_or_url=[search_or_url, "download"])
+    # @commands.command(brief=str({"type": None, "syntax": "download <search/URL>",
+    #                              "examples": ["download stickerbrush symphony",
+    #                                           "download https://www.youtube.com/watch?v=dQw4w9WgXcQ"]}),
+    #                   help="Same as the `play` command, but preloads the audio for smoother playback")
+    # async def download(self, ctx, *, search_or_url=None):
+    #     await self.play(ctx=ctx, search_or_url=[search_or_url, "download"])
 
     @commands.command(brief=str({"type": None, "syntax": "playlist <[start position] (optional)> <search/URL>",
                                  "examples": ["playlist [42] persona 4 ost",
@@ -495,9 +495,9 @@ class Music(commands.Cog):
     async def playlist(self, ctx, *, search_or_url=None):
         await self.play(ctx=ctx, search_or_url=[search_or_url, "playlist"])
 
-    @commands.command(brief=str({"type": None, "syntax": "play <search/URL>", "examples": ["play mice on venus",
-                                                                                           "play https://www.youtube.com/watch?v=dQw4w9WgXcQ"]}),
-                      help="Searches for a YouTube video and plays it in the user's connected voice channel")
+    @commands.command(brief=str({"type": None, "syntax": "play <search query/URL>", "examples": ["play mice on venus",
+                                                                                           "play https://www.youtube.com/watch?v=dQw4w9WgXcQ", "play"]}),
+                      help="Searches for a YouTube video and plays it in the user's connected voice channel\nIf playback is paused, it can be resumed using this command")
     async def play(self, ctx, *, search_or_url=None):
 
         guild = ctx.message.guild
@@ -643,7 +643,7 @@ class Music(commands.Cog):
 
     @commands.command(brief=str({"type": "owner", "syntax": "rickroll <guild id / all>",
                                  "examples": ["rickroll 592625382205947904", "rickroll all"]}),
-                      help="Plays a song in the specified guild's music channel, or all guilds")
+                      help="Plays a certain song in the specified guild's music channel, or all guilds")
     async def rickroll(self, ctx, guild_id: str = None):
 
         if ctx.message.author.id not in self.Config["owner_ids"]:
